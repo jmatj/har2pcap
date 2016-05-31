@@ -1,0 +1,7 @@
+.idea/
+build/
+dist/
+har2pcap.egg-info/
+venv/
+har2pcap/__pycache__/
+*.pyc
