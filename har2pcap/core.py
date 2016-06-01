@@ -146,11 +146,14 @@ def hmm():
     # HTTP additional bytes \r\n
     target.write(bytes.fromhex('0d 0a'))
     # HTTP Host: motherfuckingwebsite.com\r\n
-    # target.write(bytes.fromhex('48 6f 73 74 3a 20 6d 6f'))
-    # target.write(bytes.fromhex('74 68 65 72 66 75 63 6b'))
-    # target.write(bytes.fromhex('69 6e 67 77 65 62 73 69'))
-    # target.write(bytes.fromhex('74 65 2e 63 6f 6d 0d 0a'))
-    target.write(b'Host: motherfuckingwebsite.com\r\n')
+    # write "Host: "
+    target.write(bytes.fromhex('48 6f 73 74 3a 20'))
+    # write actual host
+    target.write(bytes.fromhex('6d 6f 74 68 65 72 66 75 '))
+    target.write(bytes.fromhex('63 6b 69 6e 67 77 65 62'))
+    target.write(bytes.fromhex('73 69 74 65 2e 63 6f 6d'))
+    # target.write(b'Host: motherfuckingwebsite.com')
+    target.write(bytes.fromhex('0d 0a'))
 
     # HTTP Connection: keep-alive\r\n
     target.write(bytes.fromhex('43 6f 6e 6e 65 63 74 69'))
