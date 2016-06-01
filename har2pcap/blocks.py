@@ -1,3 +1,4 @@
+from har2pcap import helpers
 import struct
 
 
