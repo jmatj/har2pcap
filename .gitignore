@@ -5,3 +5,5 @@ har2pcap.egg-info/
 venv/
 har2pcap/__pycache__/
 *.pyc
+demo.pcapng
+test.pcapng
