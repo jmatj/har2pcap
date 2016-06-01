@@ -118,7 +118,7 @@ if __name__ == '__main__':
     builder.add_block(SectionHeaderBlock())
     builder.add_block(InterfaceDescriptionBlock([
          Option(2, b'enp0s25'),  # 'if_name'
-         Option(12, b'Linux 4.4.0-22-generic'),  # 'os_name'
-         Option(0, b'\x09')  # 'if_tsresol'
+         Option(12, b'Linux 4.4.0-22-generic'),  # 'if_os'
+         Option(9, b'\x09')  # 'if_tsresol'
          ]))
     builder.write('demo.pcapng')
