@@ -62,14 +62,14 @@ def hmm():
     # This option MUST NOT be repeated within a given list of options.
     target.write(bytes.fromhex('00 00 00 00'))
     # Block Total Length
-    target.write(bytes.fromhex('48 00 00 00 '))
+    target.write(bytes.fromhex('48 00 00 00'))
     # -- END Interface Description Block --
 
     # -- START Enhanced Packet Block --
     # Block Type = 0x00000006
-    target.write(bytes.fromhex('06 00 00 00 '))
+    target.write(bytes.fromhex('06 00 00 00'))
     # Block Total Length
-    target.write(bytes.fromhex('08 02 00 00 '))
+    target.write(bytes.fromhex('08 02 00 00'))
     # Interface ID
     target.write(bytes.fromhex('00 00 00 00'))
     # Timestamp (High)
@@ -77,7 +77,7 @@ def hmm():
     # Timestamp (Low)
     target.write(bytes.fromhex('10 c9 08 1b'))
     # Captured Packet Length
-    target.write(bytes.fromhex('e6 01 00 00 '))
+    target.write(bytes.fromhex('e6 01 00 00'))
     # Original Packet Length
     target.write(bytes.fromhex('e6 01 00 00'))
 
