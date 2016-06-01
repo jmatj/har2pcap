@@ -75,30 +75,45 @@ class SectionHeaderBlock(Block):
 
 
 class InterfaceDescriptionBlock(Block):
-        def __init__(self, options, link_type=1, snap_len=262144):
-            """
-            Default link type is Ethernet.
-            See http://www.tcpdump.org/linktypes.html for valid link types.
-            """
-            super().__init__(bytes.fromhex('01 00 00 00'))
-            self.link_type = link_type
-            self.snap_len = snap_len
-            self.options = options
 
-        def _binary(self):
-            binary = number_to_16_bit(self.link_type)
+    def __init__(self, options, link_type=1, snap_len=262144):
+        """
+        Default link type is Ethernet.
+        See http://www.tcpdump.org/linktypes.html for valid link types.
+        """
+        super().__init__(bytes.fromhex('01 00 00 00'))
+        self.link_type = link_type
+        self.snap_len = snap_len
+        self.options = options
 
-            # Reserved
-            binary += number_to_16_bit(0)
+    def _binary(self):
+        binary = number_to_16_bit(self.link_type)
 
-            binary += number_to_32_bit(self.snap_len)
+        # Reserved
+        binary += number_to_16_bit(0)
 
-            for option in self.options:
-                binary += option.binary()
+        binary += number_to_32_bit(self.snap_len)
 
-            if len(self.options) > 0 and self.options[-1] is not END_OF_OPTIONS:
-                binary += END_OF_OPTIONS.binary()
-            return binary
+        for option in self.options:
+            binary += option.binary()
+
+        if len(self.options) > 0 and self.options[-1] is not END_OF_OPTIONS:
+            binary += END_OF_OPTIONS.binary()
+        return binary
+
+
+class EnhancedPacketBlock(Block):
+
+    def __init__(self, block):
+        super().__init__(bytes.fromhex('06 00 00 00'))
+        self.interface_id = 0
+        self.block = block
+        # TODO jmat the following data should be provided by the block object
+
+    def _binary(self):
+        binary = number_to_32_bit(self.interface_id)
+        # TODO jmat data provided by the block object
+        return binary
 
 
 class PcapngBuilder:
@@ -121,4 +136,6 @@ if __name__ == '__main__':
          Option(9, b'\x09'),  # 'if_tsresol'
          Option(12, b'Linux 4.4.0-22-generic')  # 'if_os'
          ]))
+
+    # builder.add_block(EnhancedPacketBlock({}))
     builder.write('demo.pcapng')
