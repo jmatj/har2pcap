@@ -2,6 +2,7 @@
 from subprocess import Popen, PIPE
 import re
 
+
 def resolve_mac(ip):
     Popen(["ping", "-c 1", ip], stdout=PIPE)
     pid = Popen(["arp", "-n", ip], stdout=PIPE)

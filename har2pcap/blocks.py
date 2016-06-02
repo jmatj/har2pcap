@@ -121,25 +121,26 @@ class EnhancedPacketBlock(Block):
         binary += number_to_32_bit(self.captured_length)
         binary += number_to_32_bit(self.original_length)
         binary += self.packet_data
-        
+
         for option in self.options:
             binary += option.binary()
 
         if len(self.options) > 0 and self.options[-1] is not END_OF_OPTIONS:
             binary += END_OF_OPTIONS.binary()
-            
+
         return binary
-    
+
     def _convert_timestamp(self, timestamp):
         mask_low = int.from_bytes(bytes.fromhex('ffffffff'), byteorder='big')
         timestamp_high = timestamp >> 32
         timestamp_low = timestamp & mask_low
-        return timestamp_high, timestamp_low 
-        
+        return timestamp_high, timestamp_low
+
     def _padded_data(self, packet_data):
         """Add Padding to 32 bits (4 Bytes)"""
         packet_data += (4 - len(packet_data) % 4) * b'\0'
         return packet_data
+
 
 class PcapngBuilder:
     def __init__(self):
@@ -161,6 +162,6 @@ if __name__ == '__main__':
          Option(9, b'\x09'),  # 'if_tsresol'
          Option(12, b'Linux 4.4.0-22-generic')  # 'if_os'
          ]))
-    
-    #builder.add_block(EnhancedPacketBlock())    
+
+    # builder.add_block(EnhancedPacketBlock())
     builder.write('demo.pcapng')

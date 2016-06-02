@@ -4,6 +4,7 @@ import os.path
 
 file_name = 'test.pcapng'
 
+
 class BasicTestSuite(unittest.TestCase):
     """Basic test cases."""
 
@@ -26,7 +27,8 @@ class BasicTestSuite(unittest.TestCase):
         # Minor Version. Current value is 0
         target.write(bytes.fromhex('00 00'))
         # Section Length (a signed 64-bit value )
-        # Section Length equal -1 (0xFFFFFFFFFFFFFFFF) means that the size of the section is not specified
+        # Section Length equal -1 (0xFFFFFFFFFFFFFFFF) means that the size of the section is not
+        # specified
         target.write(bytes.fromhex('ff ff ff ff ff ff ff ff'))
         # No options are set...
         # Block Total Length
@@ -47,8 +49,8 @@ class BasicTestSuite(unittest.TestCase):
         # Options Code (2 = if_name) and Length
         target.write(bytes.fromhex('02 00 07 00'))
         # Options: if_name
-        # The if_name option is a UTF-8 string containing the name of the device used to capture data
-        # interface name enp0s25 = 0x656e7030733235 + padding
+        # The if_name option is a UTF-8 string containing the name of the device used to capture
+        # data interface name enp0s25 = 0x656e7030733235 + padding
         target.write(bytes.fromhex('65 6e 70 30 73 32 35 00'))
         # Options Code (9 = if_tsresol) and Length
         target.write(bytes.fromhex('09 00 01 00'))
@@ -58,8 +60,8 @@ class BasicTestSuite(unittest.TestCase):
         # Options Code (12 = if_os) and Length
         target.write(bytes.fromhex('0c 00 16 00'))
         # Options: if_os
-        # The if_os option is a UTF-8 string containing the name of the operating system of the machine
-        # in which this interface is installed. + padding (here: Linux 4.4.0-22-generic)
+        # The if_os option is a UTF-8 string containing the name of the operating system of the
+        # machine in which this interface is installed. + padding (here: Linux 4.4.0-22-generic)
         target.write(bytes.fromhex('4c 69 6e 75 78 20 34 2e'))
         target.write(bytes.fromhex('34 2e 30 2d 32 32 2d 67'))
         target.write(bytes.fromhex('65 6e 65 72 69 63 00 00'))
