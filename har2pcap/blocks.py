@@ -61,8 +61,8 @@ class Block:
 class SectionHeaderBlock(Block):
 
     def __init__(self):
-        super().__init__(bytes.fromhex('0A 0D 0D 0A'))
-        self.byte_order_magic = bytes.fromhex('4D 3C 2B 1A')
+        super().__init__(b'\x0A\x0D\x0D\x0A')
+        self.byte_order_magic = b'\x4D\x3C\x2B\x1A'
         self.major_version = 1
         self.minor_version = 0
         self.section_lenght = -1
@@ -82,7 +82,7 @@ class InterfaceDescriptionBlock(Block):
         Default link type is Ethernet.
         See http://www.tcpdump.org/linktypes.html for valid link types.
         """
-        super().__init__(bytes.fromhex('01 00 00 00'))
+        super().__init__(b'\x01\x00\x00\x00')
         self.link_type = link_type
         self.snap_len = snap_len
         self.options = options
@@ -106,7 +106,7 @@ class InterfaceDescriptionBlock(Block):
 class EnhancedPacketBlock(Block):
 
     def __init__(self, timestamp, packet_data, options):
-        super().__init__(bytes.fromhex('06 00 00 00'))
+        super().__init__(b'\x06\x00\x00\x00')
         self.interface_id = 0
         self.timestamp_high, self.timestamp_low = self._convert_timestamp(timestamp)
         self.packet_data = self._padded_data(packet_data)
@@ -131,7 +131,7 @@ class EnhancedPacketBlock(Block):
         return binary
 
     def _convert_timestamp(self, timestamp):
-        mask_low = int.from_bytes(bytes.fromhex('ffffffff'), byteorder='big')
+        mask_low = int.from_bytes(b'\xff\xff\xff\xff')
         timestamp_high = timestamp >> 32
         timestamp_low = timestamp & mask_low
         return timestamp_high, timestamp_low
