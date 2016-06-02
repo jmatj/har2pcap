@@ -11,7 +11,7 @@ with open('LICENSE') as f:
 
 setup(
     name='har2pcap',
-    version='0.0.1',
+    version='0.0.1.dev',
     description='har to pcap converter',
     long_description=readme,
     author='Jonas Matter',
