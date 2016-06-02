@@ -105,17 +105,41 @@ class InterfaceDescriptionBlock(Block):
 
 class EnhancedPacketBlock(Block):
 
-    def __init__(self, block):
+    def __init__(self, timestamp, packet_data, options):
         super().__init__(bytes.fromhex('06 00 00 00'))
         self.interface_id = 0
-        self.block = block
-        # TODO jmat the following data should be provided by the block object
+        self.timestamp_high, self.timestamp_low = self._convert_timestamp(timestamp)
+        self.packet_data = self._padded_data(packet_data)
+        self.options = options
+        self.captured_length = len(packet_data)
+        self.original_length = self.captured_length
 
     def _binary(self):
         binary = number_to_32_bit(self.interface_id)
-        # TODO jmat data provided by the block object
-        return binary
+        binary += number_to_32_bit(self.timestamp_high)
+        binary += number_to_32_bit(self.timestamp_low)
+        binary += number_to_32_bit(self.captured_length)
+        binary += number_to_32_bit(self.original_length)
+        binary += self.packet_data
+        
+        for option in self.options:
+            binary += option.binary()
 
+        if len(self.options) > 0 and self.options[-1] is not END_OF_OPTIONS:
+            binary += END_OF_OPTIONS.binary()
+            
+        return binary
+    
+    def _convert_timestamp(self, timestamp):
+        mask_low = int.from_bytes(bytes.fromhex('ffffffff'), byteorder='big')
+        timestamp_high = timestamp >> 32
+        timestamp_low = timestamp & mask_low
+        return timestamp_high, timestamp_low 
+        
+    def _padded_data(self, packet_data):
+        """Add Padding to 32 bits (4 Bytes)"""
+        packet_data += (4 - len(packet_data) % 4) * b'\0'
+        return packet_data
 
 class PcapngBuilder:
     def __init__(self):
@@ -137,6 +161,6 @@ if __name__ == '__main__':
          Option(9, b'\x09'),  # 'if_tsresol'
          Option(12, b'Linux 4.4.0-22-generic')  # 'if_os'
          ]))
-
-    # builder.add_block(EnhancedPacketBlock({}))
+    
+    #builder.add_block(EnhancedPacketBlock())    
     builder.write('demo.pcapng')
