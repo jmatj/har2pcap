@@ -7,3 +7,4 @@ har2pcap/__pycache__/
 *.pyc
 demo.pcapng
 test.pcapng
+.cache
