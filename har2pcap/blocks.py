@@ -118,7 +118,7 @@ class EnhancedPacketBlock(Block):
         return binary
 
     def _convert_timestamp(self, timestamp):
-        mask_low = int.from_bytes(b'\xff\xff\xff\xff')
+        mask_low = int.from_bytes(b'\xff\xff\xff\xff', byteorder='big')
         timestamp_high = timestamp >> 32
         timestamp_low = timestamp & mask_low
         return timestamp_high, timestamp_low
