@@ -3,15 +3,15 @@ import struct
 
 
 def number_to_16_bit(int_value):
-    return struct.pack('h', int_value)
+    return struct.pack('<h', int_value)
 
 
 def number_to_32_bit(int_value):
-    return struct.pack('i', int_value)
+    return struct.pack('<i', int_value)
 
 
 def number_to_64_bit(int_value):
-    return struct.pack('q', int_value)
+    return struct.pack('<q', int_value)
 
 
 class Option:
