@@ -1,4 +1,4 @@
-from har2pcap import helpers
+import helpers
 import struct
 
 
@@ -28,8 +28,7 @@ class Option:
         binary = self.value
 
         # Padding....
-        while len(binary) % 4 != 0:
-            binary += b'\x00'
+        binary = helpers.pad_to_32bits(binary)
 
         return number_to_16_bit(self.code) + number_to_16_bit(option_lenght) + binary
 
@@ -109,7 +108,7 @@ class EnhancedPacketBlock(Block):
         super().__init__(b'\x06\x00\x00\x00')
         self.interface_id = 0
         self.timestamp_high, self.timestamp_low = self._convert_timestamp(timestamp)
-        self.packet_data = self._padded_data(packet_data)
+        self.packet_data = helpers.pad_to_32bits(packet_data)
         self.options = options
         self.captured_length = len(packet_data)
         self.original_length = self.captured_length
@@ -135,11 +134,6 @@ class EnhancedPacketBlock(Block):
         timestamp_high = timestamp >> 32
         timestamp_low = timestamp & mask_low
         return timestamp_high, timestamp_low
-
-    def _padded_data(self, packet_data):
-        """Add Padding to 32 bits (4 Bytes)"""
-        packet_data += (4 - len(packet_data) % 4) * b'\0'
-        return packet_data
 
 
 class PcapngBuilder:
