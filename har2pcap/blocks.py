@@ -1,17 +1,4 @@
 import helpers
-import struct
-
-
-def number_to_16_bit(int_value):
-    return struct.pack('<h', int_value)
-
-
-def number_to_32_bit(int_value):
-    return struct.pack('<i', int_value)
-
-
-def number_to_64_bit(int_value):
-    return struct.pack('<q', int_value)
 
 
 class Option:
@@ -30,7 +17,7 @@ class Option:
         # Padding....
         binary = helpers.pad_to_32bits(binary)
 
-        return number_to_16_bit(self.code) + number_to_16_bit(option_lenght) + binary
+        return helpers.number_to_16_bit(self.code) + helpers.number_to_16_bit(option_lenght) + binary
 
 
 END_OF_OPTIONS = Option(0, b'')
@@ -50,10 +37,10 @@ class Block:
         total_lenght = len(binary) + 12
 
         # Prepend Block Type and Bock Total Lenght
-        binary = self.blocktype + number_to_32_bit(total_lenght) + binary
+        binary = self.blocktype + helpers.number_to_32_bit(total_lenght) + binary
 
         # Append Block Total Lenght
-        binary += number_to_32_bit(total_lenght)
+        binary += helpers.number_to_32_bit(total_lenght)
         return binary
 
 
@@ -68,9 +55,9 @@ class SectionHeaderBlock(Block):
 
     def _binary(self):
         binary = self.byte_order_magic
-        binary += number_to_16_bit(self.major_version)
-        binary += number_to_16_bit(self.minor_version)
-        binary += number_to_64_bit(self.section_lenght)
+        binary += helpers.number_to_16_bit(self.major_version)
+        binary += helpers.number_to_16_bit(self.minor_version)
+        binary += helpers.number_to_64_bit(self.section_lenght)
         return binary
 
 
@@ -87,12 +74,12 @@ class InterfaceDescriptionBlock(Block):
         self.options = options
 
     def _binary(self):
-        binary = number_to_16_bit(self.link_type)
+        binary = helpers.number_to_16_bit(self.link_type)
 
         # Reserved
-        binary += number_to_16_bit(0)
+        binary += helpers.number_to_16_bit(0)
 
-        binary += number_to_32_bit(self.snap_len)
+        binary += helpers.number_to_32_bit(self.snap_len)
 
         for option in self.options:
             binary += option.binary()
@@ -114,11 +101,11 @@ class EnhancedPacketBlock(Block):
         self.original_length = self.captured_length
 
     def _binary(self):
-        binary = number_to_32_bit(self.interface_id)
-        binary += number_to_32_bit(self.timestamp_high)
-        binary += number_to_32_bit(self.timestamp_low)
-        binary += number_to_32_bit(self.captured_length)
-        binary += number_to_32_bit(self.original_length)
+        binary = helpers.number_to_32_bit(self.interface_id)
+        binary += helpers.number_to_32_bit(self.timestamp_high)
+        binary += helpers.number_to_32_bit(self.timestamp_low)
+        binary += helpers.number_to_32_bit(self.captured_length)
+        binary += helpers.number_to_32_bit(self.original_length)
         binary += self.packet_data
 
         for option in self.options:
