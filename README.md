@@ -28,13 +28,16 @@ source venv/bin/activate
 
 ## Usage
 ```
-Usage:
-  har2pcapng [source-har-file] [destination-pcapng-file]
+usage: har2pcap [-h] [--version] har-file pcap-file
 
-Options:
-  -h --help             show this screen.
-  --version             show version.
-  -v --verbose          increase verbosity
-  -q --quiet            suppress non-error messages
+Convert har to pcapng
+
+positional arguments:
+  har-file    Tha .har file to convert
+  pcap-file   The destination .pcapng file
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --version   show program's version number and exit
 
 ```

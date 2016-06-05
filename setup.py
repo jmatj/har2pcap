@@ -18,5 +18,9 @@ setup(
     author_email='jonasmatter@gmail.com',
     url='https://github.com/jmatj/har2pcap',
     license=license,
+    entry_points={
+        'console_scripts':
+            ['har2pcap = har2pcap.cli:main']
+    },
     packages=find_packages(exclude=('tests'))
 )
