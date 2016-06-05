@@ -79,13 +79,14 @@ class HTTPPacket:
     def _build_http_string(self):
         http_str = self._build_http_begin()
         http_str += '\r\n'
-        for name in self.headers:
-            http_str += '{}: {}\r\n'.format(name, self.headers[name])
+        for header in self.headers:
+            http_str += '{}: {}\r\n'.format(header['name'], header['value'])
         http_str += '\r\n'
         http_str += self.content
         
         return http_str
-    
+
+
 class HTTPRequestPacket(HTTPPacket):
     def __init__(self, method, request_uri, version, headers, content):
         super().__init__(version, headers, content)
@@ -94,7 +95,8 @@ class HTTPRequestPacket(HTTPPacket):
         
     def _build_http_begin(self):
         return '{} {} {}'.format(self.method, self.request_uri, self.version)
-    
+
+
 class HTTPResponsePacket(HTTPPacket):
     def __init__(self, status_code, status_text, version, headers, content):
         super().__init__(version, headers, content)
@@ -104,7 +106,8 @@ class HTTPResponsePacket(HTTPPacket):
     def _build_http_begin(self):
         return '{} {} {}'.format(
             self.version, self.status_code, self.status_text)
-    
+
+
 class PacketBuilder:
     def __init__(self, eth_packet, ipv4_packet, tcp_packet, http_packet):
         self.eth_packet = eth_packet

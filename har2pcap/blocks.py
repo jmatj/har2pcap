@@ -1,5 +1,6 @@
 from helpers import (number_to_16_bit, number_to_32_bit,
                     number_to_64_bit, pad_to_32bits)
+from harparser import (parse_har, build_blocks)
 
 
 class Option:
@@ -145,5 +146,10 @@ if __name__ == '__main__':
          Option(12, b'Linux 4.4.0-22-generic')  # 'if_os'
          ]))
 
-    # builder.add_block(EnhancedPacketBlock())
+    har = parse_har('../example.org.har')
+    http_blocks = build_blocks(har)
+    for block in http_blocks:
+        # TODO are opetions required?
+        builder.add_block(EnhancedPacketBlock(block['timestamp'], block['request'], ''))
+        builder.add_block(EnhancedPacketBlock(block['timestamp'], block['response'], ''))
     builder.write('demo.pcapng')

@@ -1,5 +1,6 @@
 import json
 import datetime
+from helpers import parse_request_uri
 from packet import (EthPacket, IPv4Packet, TCPPacket, HTTPPacket, HTTPRequestPacket, HTTPResponsePacket, PacketBuilder)
 
 def parse_har(url):
@@ -12,7 +13,7 @@ def build_blocks(har):
     blocks = []
     for entry in har['entries']:
         start_time = datetime.datetime.strptime(entry['startedDateTime'], '%Y-%m-%dT%H:%M:%S.%fZ').timestamp()
-        timestamp = start_time * 1e6 + int(entry['time'] * 1e3)
+        timestamp = int(start_time * 1e6 + entry['time'] * 1e3)
         block = {
             'timestamp': timestamp,
             'request': build_request_block(entry['request']),
@@ -29,9 +30,10 @@ def build_request_block(packet):
 
     http_headers = packet['headers']
     http_content = ''
-    http_packet = HTTPRequestPacket(packet['method'], packet['url'], packet['httpVersion'], http_headers, http_content)
+    http_packet = HTTPRequestPacket(packet['method'], parse_request_uri(packet['url']), packet['httpVersion'],
+                                    http_headers, http_content)
     builder = PacketBuilder(eth_packet, ip_packet, tcp_packet, http_packet)
-    return builder
+    return builder.binary()
 
 
 def build_response_block(packet):
@@ -41,9 +43,10 @@ def build_response_block(packet):
 
     http_headers = packet['headers']
     http_content = packet['content']['text']
-    http_packet = HTTPResponsePacket(packet['status'], packet['statusText'], packet['httpVersion'], http_headers, http_content)
+    http_packet = HTTPResponsePacket(packet['status'], packet['statusText'], packet['httpVersion'], http_headers,
+                                     http_content)
     builder = PacketBuilder(eth_packet, ip_packet, tcp_packet, http_packet)
-    return builder
+    return builder.binary()
 
 
 if __name__ == "__main__":

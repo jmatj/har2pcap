@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import struct
+import re
     
 def encode_mac(mac):
     mac = mac.split(':')
@@ -35,3 +36,7 @@ def number_to_32_bit(int_value):
 
 def number_to_64_bit(int_value):
     return struct.pack('<q', int_value)
+
+def parse_request_uri(uri):
+    # TODO jmat implement this
+    return uri
