@@ -8,3 +8,5 @@ har2pcap/__pycache__/
 demo.pcapng
 test.pcapng
 .cache
+*.har
+har2pcap/packet-test
