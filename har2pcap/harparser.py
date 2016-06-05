@@ -12,7 +12,7 @@ def build_blocks(har):
     blocks = []
     for entry in har['entries']:
         start_time = datetime.datetime.strptime(entry['startedDateTime'], '%Y-%m-%dT%H:%M:%S.%fZ').timestamp()
-        timestamp = start_time * 1e6 + int(entry['time'] * 1e3)
+        timestamp = int(start_time * 1e6 + entry['time'] * 1e3)
         block = {
             'timestamp': timestamp,
             'request': build_request_block(entry['request']),
