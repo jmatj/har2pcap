@@ -97,7 +97,7 @@ class HTTPRequestPacket(HTTPPacket):
     
 class HTTPResponsePacket(HTTPPacket):
     def __init__(self, status_code, status_text, version, headers, content):
-        super().__init__(version, headers.content)
+        super().__init__(version, headers, content)
         self.status_code = status_code
         self.status_text = status_text
         
