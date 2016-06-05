@@ -42,7 +42,11 @@ def build_response_block(packet):
     tcp_packet = TCPPacket(34567, 80)
 
     http_headers = packet['headers']
-    http_content = packet['content']['text']
+    print(packet['content'])
+    if 'text' in packet['content']:
+        http_content = packet['content']['text']
+    else:
+        http_content = ''
     http_packet = HTTPResponsePacket(packet['status'], packet['statusText'], packet['httpVersion'], http_headers,
                                      http_content)
     builder = PacketBuilder(eth_packet, ip_packet, tcp_packet, http_packet)
