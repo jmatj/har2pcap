@@ -1,5 +1,5 @@
 from helpers import (number_to_16_bit, number_to_32_bit,
-                    number_to_64_bit, pad_to_32bits)
+                     number_to_64_bit, pad_to_32bits)
 from harparser import (parse_har, build_blocks)
 
 
