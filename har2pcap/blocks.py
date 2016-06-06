@@ -1,5 +1,5 @@
 from helpers import (number_to_16_bit, number_to_32_bit,
-                     number_to_64_bit, pad_to_32bits)
+                     number_to_32_bit_unsigned, number_to_64_bit, pad_to_32bits)
 from harparser import (parse_har, build_packets)
 
 
@@ -104,8 +104,8 @@ class EnhancedPacketBlock(Block):
 
     def _binary(self):
         binary = number_to_32_bit(self.interface_id)
-        binary += number_to_32_bit(self.timestamp_high)
-        binary += number_to_32_bit(self.timestamp_low)
+        binary += number_to_32_bit_unsigned(self.timestamp_high)
+        binary += number_to_32_bit_unsigned(self.timestamp_low)
         binary += number_to_32_bit(self.captured_length)
         binary += number_to_32_bit(self.original_length)
         binary += self.packet_data
@@ -142,7 +142,7 @@ if __name__ == '__main__':
     builder.add_block(SectionHeaderBlock())
     builder.add_block(InterfaceDescriptionBlock([
          Option(2, b'enp0s25'),  # 'if_name'
-         Option(9, b'\x09'),  # 'if_tsresol'
+         Option(9, b'\x06'),  # 'if_tsresol'
          Option(12, b'Linux 4.4.0-22-generic')  # 'if_os'
          ]))
 

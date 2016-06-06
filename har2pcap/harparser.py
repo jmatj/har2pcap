@@ -16,7 +16,7 @@ def build_packets(har):
     for entry in har['entries']:
         start_time = datetime.datetime.strptime(
             entry['startedDateTime'], '%Y-%m-%dT%H:%M:%S.%fZ').timestamp()
-        timestamp = int(start_time * 1e6 + entry['time'] * 1e3)
+        timestamp = int(start_time * 1e6 + entry['time'] * 1e3)  # microseconds
         packet = {
             'timestamp': timestamp,
             'request': build_request_packet(entry['request']),
