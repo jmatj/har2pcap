@@ -42,8 +42,16 @@ def number_to_32_bit(int_value):
     return struct.pack('<i', int_value)
 
 
+def number_to_32_bit_unsigned(int_value):
+    return struct.pack('<I', int_value)
+
+
 def number_to_64_bit(int_value):
     return struct.pack('<q', int_value)
+
+
+def number_to_64_bit_unsigned(int_value):
+    return struct.pack('<Q', int_value)
 
 
 def parse_request_uri(url):
