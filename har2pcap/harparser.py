@@ -10,23 +10,23 @@ def parse_har(url):
         return json.load(json_file)['log']
 
 
-def build_blocks(har):
-    """Return a list of HTTP blocks"""
-    blocks = []
+def build_packets(har):
+    """Return a list of HTTP packets with complete TCP/IP stack"""
+    packets = []
     for entry in har['entries']:
         start_time = datetime.datetime.strptime(
             entry['startedDateTime'], '%Y-%m-%dT%H:%M:%S.%fZ').timestamp()
         timestamp = int(start_time * 1e6 + entry['time'] * 1e3)
-        block = {
+        packet = {
             'timestamp': timestamp,
-            'request': build_request_block(entry['request']),
-            'response': build_response_block(entry['response'])
+            'request': build_request_packet(entry['request']),
+            'response': build_response_packet(entry['response'])
         }
-        blocks.append(block)
-    return blocks
+        packets.append(packet)
+    return packets
 
 
-def build_request_block(packet):
+def build_request_packet(packet):
     eth_packet = EthPacket('ab:cd:ef:12:34:56', '65:43:21:fe:dc:ba')
     ip_packet = IPv4Packet('192.168.0.1', '8.8.8.8')
     tcp_packet = TCPPacket(34567, 80)
@@ -40,13 +40,12 @@ def build_request_block(packet):
     return builder.binary()
 
 
-def build_response_block(packet):
+def build_response_packet(packet):
     eth_packet = EthPacket('65:43:21:fe:dc:ba', 'ab:cd:ef:12:34:56')
     ip_packet = IPv4Packet('8.8.8.8', '192.168.0.1')
     tcp_packet = TCPPacket(34567, 80)
 
     http_headers = packet['headers']
-    print(packet['content'])
     if 'text' in packet['content']:
         http_content = packet['content']['text']
     else:
@@ -60,4 +59,4 @@ def build_response_block(packet):
 
 if __name__ == "__main__":
     har = parse_har('../example.org.har')
-    http_blocks = build_blocks(har)
+    http_packets = build_packets(har)
