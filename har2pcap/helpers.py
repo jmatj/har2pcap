@@ -42,6 +42,10 @@ def number_to_32_bit(int_value):
     return struct.pack('<i', int_value)
 
 
+def number_to_32_bit_big_endian(int_value):
+    return struct.pack('>i', int_value)
+
+
 def number_to_32_bit_unsigned(int_value):
     return struct.pack('<I', int_value)
 

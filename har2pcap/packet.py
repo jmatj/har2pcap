@@ -1,4 +1,4 @@
-from helpers import encode_mac, encode_ip, number_to_16_bit_unsigned
+from helpers import encode_mac, encode_ip, number_to_16_bit_unsigned, number_to_32_bit, number_to_32_bit_unsigned, number_to_32_bit_big_endian
 
 
 class EthPacket:
@@ -45,11 +45,11 @@ class IPv4Packet:
 
 
 class TCPPacket:
-    def __init__(self, source_port, dest_port):
+    def __init__(self, source_port, dest_port, seq, ack):
         self.source_port = source_port
         self.dest_port = dest_port
-        self.seq_nr = b'\x00\x00\x00\x00'
-        self.ack_nr = b'\x00\x00\x00\x00'
+        self.seq_nr = number_to_32_bit_big_endian(seq)  #b'\x00\x00\x00\x00'
+        self.ack_nr = number_to_32_bit_big_endian(ack)
         self.header_len = b'\x50'  # = 5 * 32 Bits = 20B
         self.flags = b'\x18'
         self.wind_size = b'\x00\xE5'
