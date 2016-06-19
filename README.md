@@ -4,7 +4,7 @@ har2pcap converts .har (HTTP Archive Viewer) files into the pcapng file format -
 
 ## Installation
 
-Python3 (!) and [Pip](pip) must be installed.
+Python3 (!) and [Pip](https://pypi.python.org/pypi/pip) must be installed.
 
 If so, run the following commands to setup the project
 
